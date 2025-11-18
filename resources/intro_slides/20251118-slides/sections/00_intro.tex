@@ -1,0 +1,68 @@
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline / 总目录}
+  \footlinecenter{Causal-Reasoning-Dataset-Collection}
+  \tableofcontents
+\end{frame}
+
+\begin{frame}{数据集总览 / Dataset Overview}
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{类别} & \textbf{数据集} & \textbf{任务形式} & \textbf{评价侧重点} \\
+\midrule
+\textbf{Causal Inference} & \hyperlink{cladder}{cladder} & 单分类（两类） & 区分相关/干预/反事实能力 \\
+ & \hyperlink{copa}{copa} & 单分类（两类） & 语义常识下的因果方向判别 \\
+\midrule
+\textbf{Causal Discovery} & \hyperlink{corr2cause}{corr2cause} & 多分类（三类） & 相关与因果的区分能力 \\
+ & \hyperlink{crab}{crab} & 排序 & 因果强度与成对一致性 \\
+ & \hyperlink{crass}{crass} & 多分类（四类） & 反事实场景下的因果判断 \\
+ & \hyperlink{e_care}{e\_care} & 单分类（两类） & 临床因果选择（原因/结果） \\
+ & \hyperlink{pain}{pain} & 单分类（两类） & 临床因果真假判定 \\
+\midrule
+\textbf{Additional Causal Tasks} & \hyperlink{moca}{moca} & 单分类（两类） & 社会规范下的因果归因 \\
+ & \hyperlink{tram}{tram} & 单分类（两类） & 现代语境的原因/结果选择 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\footnotesize 注：此处“单分类（两类）”与“多分类（三/四类）”均为单选题，区别仅在于标签类别数量的多少。
+\end{frame}
+
+\begin{frame}{常识相关性 / Commonsense Relevance}
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{数据集} & \textbf{任务形式} & \textbf{备注} \\
+\midrule
+\multicolumn{3}{l}{\textbf{近似纯符号 / 结构化推理（弱常识依赖）}} \\
+\hyperlink{cladder}{cladder} & 单分类（两类） &
+  Pearl 因果阶梯上的结构化因果推理 \\
+\hyperlink{corr2cause}{corr2cause} & 多分类（三类） &
+  相关 vs 因果的关系类型识别 \\
+\midrule
+\multicolumn{3}{l}{\textbf{显式依赖语义常识 / 领域背景}} \\
+\hyperlink{copa}{copa} & 单分类（两类） &
+  日常语境下的因果方向判别 \\
+\hyperlink{crab}{crab} & 排序 &
+  因果强度排序与成对一致性 \\
+\hyperlink{crass}{crass} & 多分类（四类） &
+  反事实场景下的常识性因果判断 \\
+\hyperlink{e_care}{e\_care} & 单分类（两类） &
+  临床场景下的因果选择（原因/结果） \\
+\hyperlink{pain}{pain} & 单分类（两类） &
+  临床因果陈述真伪判断 \\
+\hyperlink{moca}{moca} & 单分类（两类） &
+  道德与常识相关的因果归因 \\
+\hyperlink{tram}{tram} & 单分类（两类） &
+  现代语境下的原因/结果选择 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\footnotesize 上半部分数据集主要考察「给定结构/符号下的因果推理」，下半部分数据集则显式依赖语义常识、临床知识或社会规范。
+\end{frame}
+
+

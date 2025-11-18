@@ -1,0 +1,110 @@
+\section{其他因果任务 / Additional Causal Tasks}
+
+\begin{frame}[label=moca]{moca: Moral and Commonsense Causality (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 在复杂社会/道德情景中，判断某个主体是否应被归因为造成结果的“原因”（因果责任判断）。
+  \item 标签为二分类：
+  \[
+    y \in \{\texttt{yes},\ \texttt{no}\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：长故事文本 $s$、关注主体 $a$、结果事件 $e$。
+  \item 输出：$Y = \{\texttt{yes},\ \texttt{no}\}$。
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 归因函数：
+  \[
+    f(s,a,e) = y,\quad y \in Y
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{moca: Moral and Commonsense Causality (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Story}\\
+``Lauren and Jane share a weak computer. If two people are logged on at the same time, it usually crashes \dots{} Jane disobeys the policy and also logs on at 9:00 am. The computer crashed.''
+
+\medskip\hrule\medskip
+
+\textbf{Question}\\
+``Did Jane cause the computer to crash?''
+
+\medskip\hrule\medskip
+
+\textbf{Answer}\\
+\texttt{Yes}
+\end{examplebox}
+
+\medskip
+\textbf{标签与分析}
+\begin{itemize}
+  \item 关注“违反规范”与客观因果链之间的权衡。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=tram]{tram: Modern COPA-style Causal Choice (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item \texttt{tram} 为二选一因果选择任务，给定前提 $p$ 与提问方向（原因/结果），从两个备选句中选择更合理者：
+  \[
+    y \in \{A,B\}
+  \]
+  \item 在 COPA 设定基础上，语料更贴近现代生活，语境更复杂、句子更长。
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$p = \text{Premise},\ q \in \{\texttt{cause?},\texttt{effect?}\},\ \text{Options} = \{A,B\}$
+  \item 输出：$Y = \{A,B\}$
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 决策函数：
+  \[
+    f_{\text{tram}}(p,q,A,B) = y,\quad y = \arg\max_{c \in \{A,B\}} P(c \mid p,q)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{tram: Modern COPA-style Causal Choice (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Premise}\\
+``The roads were slippery this morning.''
+
+\medskip\hrule\medskip
+
+\textbf{Question}\\
+``What's the more plausible CAUSE?''
+
+\medskip\hrule\medskip
+
+\textbf{Options}\\
+\texttt{A) There was a heatwave. \quad B) It had snowed overnight.}
+
+\medskip\hrule\medskip
+
+\textbf{Gold}\\
+\texttt{B}
+\end{examplebox}
+
+\medskip
+\textbf{差异与引用}
+\begin{itemize}
+  \item \texttt{tram} 题量更大、语境更现代，可与 COPA 对比迁移表现。
+\end{itemize}
+\end{frame}
+
+

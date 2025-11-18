@@ -1,0 +1,240 @@
+% mybasic.sty - 简约 beamer 母版主题
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mybasic}[2025/11/18 Minimal beamer theme with CN/EN fonts]
+
+% 字体与国际化：使用 XeLaTeX
+\RequirePackage{ifxetex}
+\RequirePackage{ifluatex}
+\newif\ifxetexorluatex
+\ifxetex
+  \xetexorluatextrue
+\else
+  \ifluatex
+    \xetexorluatextrue
+  \else
+    \xetexorluatexfalse
+  \fi
+\fi
+
+\ifxetexorluatex
+  \RequirePackage{fontspec}
+  \RequirePackage{xeCJK}
+  % 英文字体：Arial（无衬线）
+  \setsansfont{Arial}
+  \setmainfont{Arial}
+  % 中文字体：宋体（SimSun）
+  \setCJKmainfont{SimSun}
+  \setCJKsansfont{SimSun}
+  % beamer 默认无衬线
+  \usefonttheme{professionalfonts}
+  \renewcommand{\familydefault}{\sfdefault}
+\else
+  % 非 XeLaTeX/LuaLaTeX 时给出友好提示
+  \PackageWarning{mybasic}{This theme requires XeLaTeX or LuaLaTeX for font settings.}
+\fi
+
+% 颜色与样式
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+% 圆角示例框
+\RequirePackage[most]{tcolorbox}
+% 东南大学主题色：黄色 + 深蓝
+\definecolor{SEUYellow}{RGB}{255,204,0}
+\definecolor{Primary}{RGB}{0,51,102}          % 深蓝主色（结构、标题）
+\definecolor{Accent}{RGB}{255,204,0}          % 黄色辅助色
+\definecolor{FootlineBlue}{HTML}{1F487C}      % 页脚专用蓝色 #1f487c
+\definecolor{LightText}{RGB}{90,90,90}
+
+% 日期格式：DD/MM/YYYY（通过 datetime2）
+\RequirePackage[useregional]{datetime2}
+\DTMnewdatestyle{seu}{
+  \renewcommand{\DTMdisplaydate}[4]{%
+    \DTMtwodigits{##3}/\DTMtwodigits{##2}/##1%
+  }%
+  \renewcommand{\DTMDisplaydate}{\DTMdisplaydate}%
+}
+\DTMsetdatestyle{seu}
+
+\mode<presentation>{
+  % 基本文字与结构色
+  \setbeamercolor{normal text}{fg=black,bg=white}
+  \setbeamercolor{structure}{fg=Primary}
+
+  % 标题栏采用「常见 beamer 风格」：深色背景+白色标题
+  \setbeamercolor{frametitle}{fg=white,bg=Primary}
+  \setbeamerfont{frametitle}{size=\Large}
+
+  % 文稿标题、副标题等
+  \setbeamercolor{title}{fg=Primary}
+  \setbeamercolor{section title}{fg=Primary}
+  \setbeamercolor{subtitle}{fg=LightText}
+  \setbeamerfont{title}{size=\LARGE}
+  \setbeamerfont{subtitle}{size=\large}
+  \setbeamerfont{author}{size=\normalsize}
+  \setbeamerfont{date}{size=\normalsize}
+
+  % block 使用常见的有色标题条 + 浅色内容底色
+  \setbeamertemplate{blocks}[default]
+  \setbeamercolor{block title}{fg=white,bg=Primary}
+  \setbeamercolor{block body}{fg=black,bg=Primary!5}
+  \setbeamercolor{block title alerted}{fg=white,bg=red!70!black}
+  \setbeamercolor{block body alerted}{fg=black,bg=red!5}
+  \setbeamercolor{block title example}{fg=white,bg=Accent!90!black}
+  \setbeamercolor{block body example}{fg=black,bg=Accent!5}
+}
+
+% 去除默认导航符号
+\setbeamertemplate{navigation symbols}{}
+
+% 背景模板：保持为空白底色
+\setbeamertemplate{background}{}
+
+% 自定义内容页标题样式：无 logo，居左标题，简洁无横线
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \vspace*{0.3em}% 略微减少标题到页面顶部的留白
+  \begin{beamercolorbox}[wd=\paperwidth,leftskip=0.6cm,rightskip=1.2cm]{frametitle}%
+    \usebeamerfont{frametitle}%
+    \strut\insertframetitle\strut%
+  \end{beamercolorbox}%
+}
+
+% 页脚：蓝色背景(#1f487c)，三栏布局
+% 左：名字 + 日期(DD/MM/YYYY)
+% 中：自定义内容（通过 \footlinecenter 设置）
+% 右：页码 当前/总页
+\setbeamercolor{footline}{bg=FootlineBlue,fg=white}
+
+\newcommand{\mybasic@footlinecenter}{}%
+\newcommand{\footlinecenter}[1]{\renewcommand{\mybasic@footlinecenter}{#1}}%
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    % 左侧：作者 + 日期
+    \begin{beamercolorbox}[wd=.15\paperwidth,ht=2.8ex,dp=1.2ex,left]{footline}%
+      \hspace*{2mm}\insertshortauthor\quad\DTMtoday%
+    \end{beamercolorbox}%
+    % 中间：可自定义内容（推荐：Institute of Cognitive Intelligence / COIN）
+    \begin{beamercolorbox}[wd=.75\paperwidth,ht=2.8ex,dp=1.2ex,center]{footline}%
+      \mybasic@footlinecenter%
+    \end{beamercolorbox}%
+    % 右侧：页码
+    \begin{beamercolorbox}[wd=.10\paperwidth,ht=2.8ex,dp=1.2ex,right]{footline}%
+      \insertframenumber{} / \inserttotalframenumber\hspace*{2mm}%
+    \end{beamercolorbox}%
+  }%
+}
+
+% 标题页模板（东南大学 + COIN 风格）
+% 若在主文档中定义了 \advisor，则在作者下方自动显示指导老师信息
+\defbeamertemplate*{title page}{mybasic}{
+  \vspace*{1.5em}
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+  \vspace{0.7em}
+  {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+  \vspace{1.8em}
+  {\usebeamerfont{author}\insertauthor\par}
+  \ifdefined\advisor
+    \vspace{0.5em}
+    {\usebeamerfont{author}\advisor\par}
+  \fi
+  \vspace{0.5em}
+  {\usebeamerfont{date}\insertdate\par}
+  \vfill
+  % 底部：单位（完全由 \institute 控制，不再强制附加 COIN，避免重复）
+  {\small
+    \ifx\insertinstitute\@empty\else\insertinstitute\par\fi
+  }
+}
+\setbeamertemplate{title page}[mybasic]
+
+% 分节页模板（Section Page）：去掉大色块，改为简约文字 + 细线
+\defbeamertemplate*{section page}{mybasic}{
+  \vspace*{1.8cm}
+  \begin{center}
+    % 上方小字：Part.X
+    {\color{LightText}\small Part.~\thesection}\par
+    \vspace{0.6em}
+    % 章节标题
+    {\usebeamerfont{title}\color{Primary}\insertsection\par}
+    \vspace{0.6em}
+  \end{center}
+  \vspace*{1.5cm}
+}
+\setbeamertemplate{section page}[mybasic]
+
+% 自动在每个 \section 开头插入分节页和当前目录（可按需禁用）
+\newif\ifmybasic@sectiontoc
+\mybasic@sectiontoctrue
+\newcommand{\DisableSectionTOC}{\mybasic@sectiontocfalse}
+\newcommand{\EnableSectionTOC}{\mybasic@sectiontoctrue}
+
+\AtBeginSection[]{
+  \begin{frame}[plain]
+    % 分节页统一使用项目名作为页脚，避免继承前一页的论文引用
+    \footlinecenter{Causal-Reasoning-Dataset-Collection}
+    \usebeamertemplate*{section page}
+  \end{frame}
+  \ifmybasic@sectiontoc
+    \begin{frame}{Outline}
+      % 每个 section 的 Outline 也统一显示项目名
+      \footlinecenter{Causal-Reasoning-Dataset-Collection}
+      \tableofcontents[currentsection]
+    \end{frame}
+  \fi
+}
+
+% 致谢页命令
+% 若定义了 \advisor，则在致谢页中一并展示姓名、指导老师与时间
+\newcommand{\thanksframe}[1][Thank You]{
+  \begin{frame}[plain]
+    \vfill
+    \begin{center}
+      {\usebeamerfont{title}\usebeamercolor[fg]{title}\LARGE #1\par}
+      \vspace{1.5em}
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\normalsize
+        \insertauthor\par
+        \vspace{0.4em}
+        \ifdefined\advisor
+          \advisor\par
+          \vspace{0.4em}
+        \fi
+        \insertdate\par
+      }
+    \end{center}
+    \vfill
+  \end{frame}
+}
+
+% 通用“示例”圆角框环境：带有有色标题条 + 阴影，类似论文示例块
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  colback=white,          % 内容区白色
+  colframe=Primary,       % 外框主色
+  boxrule=0.6pt,
+  arc=2mm,                % 整体圆角
+  left=2mm,
+  right=2mm,
+  top=1mm,              % 缩小标题与内容之间的竖直间距
+  bottom=1mm,
+  colbacktitle=Primary,   % 标题条背景色
+  coltitle=white,         % 标题文字颜色
+  fonttitle=\bfseries,
+  title=#1,
+  attach boxed title to top left={
+    yshift=-1.2mm,        % 标题条稍微往上提一点
+    xshift=1mm
+  },
+  boxed title style={
+    sharp corners,
+    boxrule=0pt,
+    top=0.5mm,
+    bottom=0.5mm,
+    left=3mm,
+    right=3mm
+  },
+  drop shadow=black!20    % 轻微阴影
+}
+

@@ -1,0 +1,123 @@
+\section{因果推断 / Causal Inference}
+
+\begin{frame}[label=cladder]{cladder: Causal Ladder Reasoning (1/2)}
+\textbf{任务定义 / Task Definition}
+\begin{itemize}
+  \item 测试语言模型在 Pearl 因果阶梯三个层级上的推理能力：
+  \[
+    \text{Association} \rightarrow \text{Intervention} \rightarrow \text{Counterfactual}
+  \]
+  \item 每条样本由前提 $x$ 与因果询问 $q$ 组成，要求判断查询陈述是否成立。
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$x = \text{context},\ q = \text{causal query}$
+  \item 输出标签集合：
+  \[
+    Y = \{\texttt{yes},\texttt{no}\} \quad \text{或} \quad Y=\{A,B\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 判定函数：
+  \[
+    f(x,q)=y,\quad y \in Y
+  \]
+  \item 每条样本带有整数阶梯标签 $\mathrm{rung} \in \{1,2,3\}$，大致对应相关性 (association)、干预 (intervention)、反事实 (counterfactual)，并结合 \texttt{query\_type}（如 \texttt{marginal} / \texttt{ate} / \texttt{det-counterfactual} 等）做细粒度评估。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{cladder: Causal Ladder Reasoning (2/2)}
+\begin{examplebox}[示例 / Example]
+\small
+\textbf{Prompt}\\
+``Husband has a direct effect on wife and alarm clock \dots{} If we disregard the mediation effect through wife, would husband positively affect alarm clock?''
+
+\medskip\hrule\medskip
+
+\textbf{Label}\\
+\texttt{yes}
+\end{examplebox}
+
+\medskip
+\textbf{标签与阶梯}
+\begin{itemize}
+  \item 任务类型：相关性 / 干预 / 反事实三类因果问题。
+  \item 选项数量：2 个 (yes/no 或 A/B)。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{cladder: Dataset Statistics (3/3)}
+\textbf{整体规模与分布}
+\begin{itemize}
+  \item 样本总数：$N = 10112$。
+  \item 每条样本带有阶梯标签 $\mathrm{rung} \in \{1,2,3\}$ 以及细粒度 \texttt{query\_type}。
+\end{itemize}
+
+\medskip
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{images/CLADDER_statistic.png}
+\end{center}
+\end{frame}
+
+\begin{frame}[label=copa]{copa: Everyday Causal QA (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 给定前提句 $p$ 和询问方向（\texttt{cause}/\texttt{effect}），在两个候选句中选出更合理的原因或结果：
+  \[
+    y \in \{A,B\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$p = \text{Premise},\ q \in \{\texttt{cause?},\texttt{effect?}\},\ \text{Options}=\{A,B\}$
+  \item 输出：$Y = \{A,B\}$
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 决策函数：
+  \[
+    f(p,q,A,B) = y,\quad y = \arg\max_{c \in \{A,B\}} P(c \mid p,q)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{copa: Everyday Causal QA (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Premise}\\
+``The office was closed.''
+
+\medskip\hrule\medskip
+
+\textbf{Asks-for}\\
+\texttt{cause}
+
+\medskip\hrule\medskip
+
+\textbf{Options}\\
+\texttt{A) It was a holiday. \quad B) It was summer.}
+
+\medskip\hrule\medskip
+
+\textbf{Gold}\\
+\texttt{A}
+\end{examplebox}
+
+\medskip
+\textbf{选项与标签}
+\begin{itemize}
+  \item 选项数量：2 (A/B)，输出集合 $Y=\{A,B\}$。
+  \item 可分别统计 \texttt{cause} / \texttt{effect} 两种设问的准确率。
+\end{itemize}
+\end{frame}
+
+

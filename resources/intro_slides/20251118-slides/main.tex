@@ -1,0 +1,36 @@
+\documentclass[aspectratio=169]{beamer}
+
+% 使用自定义简约主题（母版）
+\usepackage{mybasic}
+% 表格：经典三线表
+\usepackage{booktabs}
+% 绘图：数据分布可视化
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% 主题元信息
+\title{因果推理数据集概览}
+\subtitle{Causal-Reasoning-Dataset-Collection}
+\author[Lin]{Lin Ren / 任林}
+% \newcommand{\advisor}{指导老师：肖国辉}
+\institute{Southeast University \\ Institute of Cognitive Intelligence (COIN)}
+\date{\today}
+% 建议在页脚中放置项目信息（默认：只显示项目名）
+\footlinecenter{Causal-Reasoning-Dataset-Collection}
+
+% 目录显示控制
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+% 结构拆分：各部分内容位于 sections/ 目录下
+\input{sections/00_intro}
+\input{sections/10_causal_inference}
+\input{sections/20_causal_discovery}
+\input{sections/30_additional_tasks}
+\input{sections/90_summary}
+\input{sections/95_references}
+
+\end{document}
+
+

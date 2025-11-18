@@ -1,0 +1,252 @@
+\section{因果发现 / Causal Discovery}
+
+\begin{frame}[label=corr2cause]{corr2cause: Correlation vs. Causation (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 输入为相关性叙述 $x$ 与因果假设 $h$，模型需判断二者关系：
+  \[
+    y \in \{\texttt{entailment},\ \texttt{neutral},\ \texttt{contradiction}\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$x = \text{correlation statement},\ h = \text{causal hypothesis}$
+  \item 输出：$Y = \{\text{entailment},\ \text{neutral},\ \text{contradiction}\}$
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 自然语言推理式三分类：
+  \[
+    f(x,h) = y,\quad y \in Y
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{corr2cause: Correlation vs. Causation (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Premise}\\
+``Suppose there is a closed system of 2 variables, A and B. \dots{} A correlates with B.''
+
+\medskip\hrule\medskip
+
+\textbf{Hypothesis}\\
+``A directly affects B.''
+
+\medskip\hrule\medskip
+
+\textbf{Relation}\\
+\texttt{neutral}
+\end{examplebox}
+
+\medskip
+\textbf{标签与选项}
+\begin{itemize}
+  \item 三类标签: \texttt{entailment}, \texttt{neutral}, \texttt{contradiction}。
+  \item 考察模型是否能抗拒“把相关当因果”的倾向。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=crab]{crab: Graded and Pairwise Causality (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 给定结果事件 $e$ 与候选因果事件集合 $C=\{c_1,\dots,c_k\}$，评估因果强度或比较哪一个 cause 更强。
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item Graded：输入 $(e, C)$，输出每个 $c_i$ 的强度等级
+  \[
+    y_i \in \{\texttt{High},\texttt{Medium},\texttt{Low},\texttt{None}\}
+  \]
+  \item Pairwise：输入 $(e, c_i, c_j)$，输出
+  \[
+    y \in \{c_i \succ c_j,\ c_j \succ c_i,\ \texttt{tie}\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item Graded: $f_{\text{graded}}(e,c_i) = s_i$
+  \item Pairwise: $f_{\text{pair}}(e,c_i,c_j) = y$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{crab: Graded and Pairwise Causality (2/2)}
+\begin{examplebox}[示例 (graded\_causality)]
+\small
+\textbf{Effect}\\
+``The U.K. broke its national record for the highest temperature ever registered.''
+
+\medskip\hrule\medskip
+
+\textbf{Candidates}\\
+多个与全球变暖、极端高温相关的事件，各自带有人类因果得分（如 \texttt{score\_c = 90}）。
+
+\medskip\hrule\medskip
+
+\textbf{Task}\\
+模型需选择对该效果最具因果解释力的事件。
+\end{examplebox}
+
+\medskip
+\textbf{标签与评估}
+\begin{itemize}
+  \item Graded: 4 级强度标签; Pairwise: 成对比较的一致性指标等。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=crass]{crass: Counterfactual Causal QA (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 给定实际事件 $e$ 和一个反事实询问 $q$，从四个选项中选择最合理的反事实结果：
+  \[
+    y \in \{1,2,3,4\}
+  \]
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$e = \text{actual event},\ q = \text{counterfactual question},\ \text{Options} = \{o_1,o_2,o_3,o_4\}$
+  \item 输出：$Y = \{1,2,3,4\}$
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 决策函数：
+  \[
+    f(e,q,o_1,\dots,o_4) = y,\quad y = \arg\max_{i} P(o_i \mid e,q)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{crass: Counterfactual Causal QA (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Input}\\
+``A woman opens a treasure chest. What would have happened if the woman had not opened the treasure chest?''
+
+\medskip\hrule\medskip
+
+\textbf{Options}\\
+\texttt{(1) The treasure chest would have been open. (2) That is not possible. (3) The treasure chest would have remained closed. (4) I don't know.}
+
+\medskip\hrule\medskip
+
+\textbf{Gold}\\
+\texttt{(3)}
+\end{examplebox}
+
+\medskip
+\textbf{选项与标签}
+\begin{itemize}
+  \item 4 选项多选题，包含“不可能”“我不知道”等不确定性表达。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=e_care]{e\_care: Clinical Causal Judgement (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 临床语境的因果选择任务：给定前提句 $p$ 与设问方向（\texttt{cause}/\texttt{effect}），在两个候选断言中选择更合理的原因或结果。
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$p=\text{Premise},\ q\in\{\texttt{cause?},\texttt{effect?}\},\ \text{Hypotheses}=\{h_1,h_2\}$
+  \item 输出：$Y=\{1,2\}$（或记为 $\{A,B\}$）
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 决策函数：
+  \[
+    f(p,q,h_1,h_2)=y,\quad y=\arg\max_{c\in\{1,2\}} P(h_c\mid p,q)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{e\_care: Clinical Causal Judgement (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Premise}\\
+``This child caught roseola.''
+
+\medskip\hrule\medskip
+
+\textbf{Ask-for}\\
+\texttt{effect}
+
+\medskip\hrule\medskip
+
+\textbf{Hypotheses}\\
+\texttt{(1) He succeeded via conjuring up a flower.}\\
+\texttt{(2) The child had a fever which followed by a rash.}
+
+\medskip\hrule\medskip
+
+\textbf{Gold}\\
+\texttt{(2)}
+\end{examplebox}
+
+\medskip
+\textbf{标签与难点}
+\begin{itemize}
+  \item 标签集合：二选一（1/2 或 A/B）；同时覆盖 \texttt{cause}/\texttt{effect} 两种设问。
+  \item 易混淆点：非因果相关（共病/伴随症状）与真实因果的区分。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=pain]{pain: Clinical Causal Judgement (1/2)}
+\textbf{任务定义}
+\begin{itemize}
+  \item 医学因果判别：判断一个临床因果断言（如 “疾病 $\rightarrow$ 症状” 或 “治疗 $\rightarrow$ 结局”）是否为真。
+\end{itemize}
+
+\medskip
+\textbf{输入 / 输出格式}
+\begin{itemize}
+  \item 输入：$x = \text{clinical causal statement}$
+  \item 输出：$y \in \{\texttt{true},\ \texttt{false}\}$
+\end{itemize}
+
+\medskip
+\textbf{形式化定义}
+\begin{itemize}
+  \item 二分类函数：
+  \[
+    f(x) = y,\quad y \in \{\texttt{true},\texttt{false}\}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{pain: Clinical Causal Judgement (2/2)}
+\begin{examplebox}[示例]
+\small
+\textbf{Query}\\
+``L L4 Radikulopati causes L Mediala kn\u00e4ledsbesv\u00e4r. \dots{} Answer with true or false.''
+
+\medskip\hrule\medskip
+
+\textbf{Answer}\\
+\texttt{true} (\texttt{Answer = 1.0})
+\end{examplebox}
+
+\medskip
+\textbf{标签与难点}
+\begin{itemize}
+  \item 标签集合：True / False；分布不均衡，更贴近真实临床统计。
+  \item 易混淆点：共病或相关症状被误判为因果关系。
+\end{itemize}
+\end{frame}
+
+
